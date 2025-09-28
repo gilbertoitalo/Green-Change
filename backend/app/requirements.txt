@@ -1,1 +1,5 @@
-# Add backend dependencies here
+# Addfastapi
+uvicorn[standard]
+pydantic
+python-dotenv
+email-validator backend dependencies here
