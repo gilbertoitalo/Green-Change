@@ -23,10 +23,10 @@ jobs:
       - name: Choose requirements file
         id: reqs
         run: |
-          if [ -f backend-it/app/requirements.txt ]; then
-            echo "path=backend-it/app/requirements.txt" >> $GITHUB_OUTPUT
-          elif [ -f backend-it/app/requeriments.txt ]; then
-            echo "path=backend-it/app/requeriments.txt" >> $GITHUB_OUTPUT
+          if [ -f backend/app/requirements.txt ]; then
+            echo "path=backend/app/requirements.txt" >> $GITHUB_OUTPUT
+          elif [ -f backend/app/requeriments.txt ]; then
+            echo "path=backend/app/requeriments.txt" >> $GITHUB_OUTPUT
           else
             echo "Nenhum requirements encontrado em backend/app/"
             exit 1
@@ -37,7 +37,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r "${{ steps.reqs.outputs.path }}"
 
-      # (Opcional) Lint/Testes — não falha o CI se ainda não tens testes
       - name: Run tests (soft-fail)
-        run: |
-          pytest -q || true
+        run: pytest -q || true
+
