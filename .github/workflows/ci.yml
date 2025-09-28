@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ "main", "backend" ]
+    branches: [ "main", "backend-it" ]
   pull_request:
-    branches: [ "main", "backend" ]
+    branches: [ "main", "backend-it" ]
 
 jobs:
   backend:
@@ -23,10 +23,10 @@ jobs:
       - name: Choose requirements file
         id: reqs
         run: |
-          if [ -f backend/app/requirements.txt ]; then
-            echo "path=backend/app/requirements.txt" >> $GITHUB_OUTPUT
-          elif [ -f backend/app/requeriments.txt ]; then
-            echo "path=backend/app/requeriments.txt" >> $GITHUB_OUTPUT
+          if [ -f backend-it/app/requirements.txt ]; then
+            echo "path=backend-it/app/requirements.txt" >> $GITHUB_OUTPUT
+          elif [ -f backend-it/app/requeriments.txt ]; then
+            echo "path=backend-it/app/requeriments.txt" >> $GITHUB_OUTPUT
           else
             echo "Nenhum requirements encontrado em backend/app/"
             exit 1
