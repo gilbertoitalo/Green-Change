@@ -19,6 +19,9 @@ jobs:
         with:
           python-version: '3.12'
           cache: 'pip'
+          cache-dependency-path: |
+            backend/app/requirements.txt
+            backend/app/requeriments.txt
 
       - name: Choose requirements file
         id: reqs
@@ -29,6 +32,7 @@ jobs:
             echo "path=backend/app/requeriments.txt" >> $GITHUB_OUTPUT
           else
             echo "Nenhum requirements encontrado em backend/app/"
+            ls backend/app
             exit 1
           fi
 
@@ -37,7 +41,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r "${{ steps.reqs.outputs.path }}"
 
-      # (Opcional) Lint/Testes — não falha o CI se ainda não tens testes
       - name: Run tests (soft-fail)
         run: |
           pytest -q || true
