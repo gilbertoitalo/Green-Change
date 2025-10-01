@@ -3,4 +3,8 @@ uvicorn[standard]
 pydantic
 python-dotenv
 email-validator
+web3
+httpx
+pydantic>=2
+
 

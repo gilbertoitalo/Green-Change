@@ -1,3 +1,5 @@
 timestamp,email,km,kwh,co2_kg,credits_tCO2
 1759007955,user@example.com,,,,
 1759008104,user123@example.com,,,,
+1759081407,user24@gmail.com,100.0,10.0,18.0,0.018
+1759345583,teste@ex.com,120.0,,21.6,0.0216
