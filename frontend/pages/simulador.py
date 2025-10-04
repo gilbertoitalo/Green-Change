@@ -1,26 +1,24 @@
-import streamlit as st
+import os, requests, streamlit as st
 
 st.set_page_config(page_title="Simulador", layout="wide")
+BASE = st.secrets.get("BACKEND_BASE_URL", os.getenv("BACKEND_BASE_URL", "http://127.0.0.1:8000"))
 
 st.title("Calcule sua pegada de carbono")
-
 st.write("Preencha os dados abaixo para simular seu impacto ambiental:")
 
 with st.form("simulador_form"):
-    km = st.number_input("Quilômetros rodados por ano:", min_value=0.0, step=0.1, value=12000.0)
-    kWh = st.number_input("kWh consumidos por ano:", min_value=0.0, step=0.1, value=3500.0)
-    residuos = st.number_input("Kg de resíduos por ano:", min_value=0.0, step=0.1, value=150.0)
-    submitted = st.form_submit_button("Calcular impacto")
+    km = st.number_input("Quilômetros (km)", min_value=0.0, step=1.0, value=100.0, format="%.2f")
+    submitted = st.form_submit_button("Calcular")
 
 if submitted:
-    # Fórmulas simples de cálculo (ajuste os fatores conforme precisar)
-    transporte = km * 0.0002   # cada km gera 0.0002 tCO₂e
-    energia = kWh * 0.0005     # cada kWh gera 0.0005 tCO₂e
-    res = residuos * 0.001     # cada kg de resíduo = 0.001 tCO₂e
-    total = transporte + energia + res
+    try:
+        r = requests.post(f"{BASE}/credits/simulate", json={"distance_km": km}, timeout=10)
+        r.raise_for_status()
+        data = r.json()
+        st.success("Cálculo realizado!")
+        st.metric("CO₂ evitado (kg)", f"{data['co2_credits_kg']:.2f}")
+        st.metric("Distância (km)", f"{data['distance_km']:.2f}")
+    except Exception as e:
+        st.error(f"Erro ao consultar API: {e}")
 
-    st.success("Cálculo realizado com sucesso!")
-    st.metric("Transporte (tCO₂e)", f"{transporte:.2f}")
-    st.metric("Energia (tCO₂e)", f"{energia:.2f}")
-    st.metric("Resíduos (tCO₂e)", f"{res:.2f}")
-    st.metric("Total anual (tCO₂e)", f"{total:.2f}")
+

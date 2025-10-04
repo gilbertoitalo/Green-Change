@@ -5,6 +5,13 @@ import os
 # Configuração básica
 # -------------------------------
 st.set_page_config(page_title="GreenCharge", layout="wide")
+try:
+    st.page_link("pages/login.py", label="Cadastre-se grátis")
+    st.page_link("pages/simulador.py", label="Calcule seu impacto")
+    st.page_link("pages/mint.py", label="Mint")
+except Exception:
+    st.info("Use o menu lateral para navegar.")
+
 
 # -------------------------------
 # Simulação de login

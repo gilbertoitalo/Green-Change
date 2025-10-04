@@ -1,6 +1,6 @@
 import csv, time
 from pathlib import Path
-from services.carbon_calc import calculate_co2_credits, km_from_kwh
+from .services.carbon_calc import calculate_co2_credits, km_from_kwh
 
 
 DATA_DIR = Path(__file__).resolve().parent.parent.parent / "data"
