@@ -1,0 +1,58 @@
+[1mdiff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml[m
+[1mindex 1f6e03b..07e3cb6 100644[m
+[1m--- a/.github/workflows/ci.yml[m
+[1m+++ b/.github/workflows/ci.yml[m
+[36m@@ -1,17 +1,43 @@[m
+ name: CI[m
+ [m
+[31m-on: [push, pull_request][m
+[32m+[m[32mon:[m
+[32m+[m[32m  push:[m
+[32m+[m[32m    branches: [ "main", "backend" ][m
+[32m+[m[32m  pull_request:[m
+[32m+[m[32m    branches: [ "main", "backend" ][m
+ [m
+ jobs:[m
+[31m-  build:[m
+[32m+[m[32m  backend:[m
+     runs-on: ubuntu-latest[m
+[32m+[m
+     steps:[m
+[31m-      - uses: actions/checkout@v4[m
+[31m-      - name: Setup Node[m
+[31m-        uses: actions/setup-node@v4[m
+[32m+[m[32m      - name: Checkout[m
+[32m+[m[32m        uses: actions/checkout@v4[m
+[32m+[m
+[32m+[m[32m      - name: Set up Python[m
+[32m+[m[32m        uses: actions/setup-python@v5[m
+         with:[m
+[31m-          node-version: '20'[m
+[31m-      - name: Install frontend[m
+[31m-        run: npm install --prefix frontend[m
+[31m-      - name: Lint frontend[m
+[31m-        run: npm run lint --prefix frontend[m
+[32m+[m[32m          python-version: '3.12'[m
+[32m+[m[32m          cache: 'pip'[m
+[32m+[m
+[32m+[m[32m      - name: Choose requirements file[m
+[32m+[m[32m        id: reqs[m
+[32m+[m[32m        run: |[m
+[32m+[m[32m          if [ -f backend/app/requirements.txt ]; then[m
+[32m+[m[32m            echo "path=backend/app/requirements.txt" >> $GITHUB_OUTPUT[m
+[32m+[m[32m          elif [ -f backend/app/requeriments.txt ]; then[m
+[32m+[m[32m            echo "path=backend/app/requeriments.txt" >> $GITHUB_OUTPUT[m
+[32m+[m[32m          else[m
+[32m+[m[32m            echo "Nenhum requirements encontrado em backend/app/"[m
+[32m+[m[32m            exit 1[m
+[32m+[m[32m          fi[m
+[32m+[m
+[32m+[m[32m      - name: Install deps[m
+[32m+[m[32m        run: |[m
+[32m+[m[32m          python -m pip install --upgrade pip[m
+[32m+[m[32m          pip install -r "${{ steps.reqs.outputs.path }}"[m
+[32m+[m
+[32m+[m[32m      # (Opcional) Lint/Testes — não falha o CI se ainda não tens testes[m
+[32m+[m[32m      - name: Run tests (soft-fail)[m
+[32m+[m[32m        run: |[m
+[32m+[m[32m          pytest -q || true[m

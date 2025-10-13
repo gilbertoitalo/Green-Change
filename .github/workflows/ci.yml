@@ -42,5 +42,7 @@ jobs:
           pip install -r "${{ steps.reqs.outputs.path }}"
 
       - name: Run tests (soft-fail)
+        run: pytest -q || true
+
         run: |
           pytest -q || true
